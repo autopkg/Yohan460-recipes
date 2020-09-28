@@ -22,79 +22,25 @@
     <key>Process</key>
     <array>
         <dict>
-			<key>Processor</key>
-			<string>CodeSignatureVerifier</string>
-			<key>Arguments</key>
-			<dict>
-				<key>input_path</key>
-				<string>%pathname%/* Configuration/*.pkg</string>
-                <key>expected_authority_names</key>
-                <array>
-                    <string>Developer ID Installer: JAMF Software (483DWKW443)</string>
-                    <string>Developer ID Certification Authority</string>
-                    <string>Apple Root CA</string>
-                </array>
-			</dict>
-		</dict>
+            <key>Processor</key>
+            <string>CodeSignatureVerifier</string>
+            <key>Arguments</key>
+            <dict>
+                <key>input_path</key>
+                <string>%pathname%/* Configuration.app</string>
+                <key>requirement</key>
+                <string>anchor apple generic and identifier "com.jamf.connect.configuration" and (certificate leaf[field.1.2.840.113635.100.6.1.9] /* exists */ or certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = "483DWKW443")</string>
+            </dict>
+        </dict>
         <dict>
-			<key>Processor</key>
-			<string>FlatPkgUnpacker</string>
-			<key>Arguments</key>
-			<dict>
-				<key>flat_pkg_path</key>
-				<string>%pathname%/* Configuration/*.pkg</string>
-                <key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack</string>
-                <key>purge_destination</key>
-                <true/>
-			</dict>
-		</dict>
-        <dict>
-			<key>Processor</key>
-			<string>Copier</string>
-			<key>Arguments</key>
-			<dict>
-				<key>source_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack/*.pkg/Payload</string>
-                <key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack/Payload</string>
-                <key>overwrite</key>
-                <true/>
-			</dict>
-		</dict>
-        <dict>
-			<key>Processor</key>
-			<string>PkgPayloadUnpacker</string>
-			<key>Arguments</key>
-			<dict>
-				<key>pkg_payload_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack/Payload</string>
-                <key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/payload</string>
-                <key>purge_destination</key>
-                <true/>
-			</dict>
-		</dict>
-        <dict>
-			<key>Processor</key>
-			<string>PlistReader</string>
-			<key>Arguments</key>
-			<dict>
-				<key>info_path</key>
-				<string>%RECIPE_CACHE_DIR%/payload/Applications/Jamf Connect Configuration.app/Contents/Info.plist</string>
-			</dict>
-		</dict>
-        <dict>
-			<key>Processor</key>
-			<string>PkgCopier</string>
-			<key>Arguments</key>
-			<dict>
-				<key>source_pkg</key>
-				<string>%pathname%/* Configuration/*.pkg</string>
-                <key>pkg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg</string>
-			</dict>
-		</dict>
+            <key>Arguments</key>
+            <dict>
+                <key>app_path</key>
+                <string>%pathname%/* Configuration.app</string>
+            </dict>
+            <key>Processor</key>
+            <string>AppPkgCreator</string>
+        </dict>
     </array>
 </dict>
 </plist>
