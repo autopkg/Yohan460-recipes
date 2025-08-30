@@ -2,99 +2,97 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>Description</key>
-    <string>Transfers the package from the pre-downloaded DMG.</string>
-    <key>Identifier</key>
-    <string>com.github.yohan460-recipes.pkg.JamfConnectSync</string>
-    <key>Input</key>
-    <dict>
-        <key>APP_FILENAME</key>
-        <string>Jamf Connect Sync</string>
-        <key>BUNDLE_ID</key>
-        <string>com.jamf.connect.sync</string>
-        <key>NAME</key>
-        <string>JamfConnectSync</string>
-    </dict>
-    <key>MinimumVersion</key>
-    <string>1.0.0</string>
-    <key>ParentRecipe</key>
-    <string>com.github.yohan460-recipes.download.JamfConnect</string>
-    <key>Process</key>
-    <array>
-        <dict>
-			<key>Processor</key>
-			<string>CodeSignatureVerifier</string>
+	<key>Description</key>
+	<string>Transfers the package from the pre-downloaded DMG.</string>
+	<key>Identifier</key>
+	<string>com.github.yohan460-recipes.pkg.JamfConnectSync</string>
+	<key>Input</key>
+	<dict>
+		<key>APP_FILENAME</key>
+		<string>Jamf Connect Sync</string>
+		<key>NAME</key>
+		<string>JamfConnectSync</string>
+	</dict>
+	<key>MinimumVersion</key>
+	<string>1.0.0</string>
+	<key>ParentRecipe</key>
+	<string>com.github.yohan460-recipes.download.JamfConnect</string>
+	<key>Process</key>
+	<array>
+		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>expected_authority_names</key>
+				<array>
+					<string>Developer ID Installer: JAMF Software (483DWKW443)</string>
+					<string>Developer ID Certification Authority</string>
+					<string>Apple Root CA</string>
+				</array>
 				<key>input_path</key>
 				<string>%pathname%/* Sync/*.pkg</string>
-                <key>expected_authority_names</key>
-                <array>
-                    <string>Developer ID Installer: JAMF Software (483DWKW443)</string>
-                    <string>Developer ID Certification Authority</string>
-                    <string>Apple Root CA</string>
-                </array>
 			</dict>
-		</dict>
-        <dict>
 			<key>Processor</key>
-			<string>FlatPkgUnpacker</string>
+			<string>CodeSignatureVerifier</string>
+		</dict>
+		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpack</string>
 				<key>flat_pkg_path</key>
 				<string>%pathname%/* Sync/*.pkg</string>
-                <key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack</string>
-                <key>purge_destination</key>
-                <true/>
+				<key>purge_destination</key>
+				<true/>
 			</dict>
-		</dict>
-        <dict>
 			<key>Processor</key>
-			<string>Copier</string>
+			<string>FlatPkgUnpacker</string>
+		</dict>
+		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/unpack/Payload</string>
+				<key>overwrite</key>
+				<true/>
 				<key>source_path</key>
 				<string>%RECIPE_CACHE_DIR%/unpack/*.pkg/Payload</string>
-                <key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/unpack/Payload</string>
-                <key>overwrite</key>
-                <true/>
 			</dict>
-		</dict>
-        <dict>
 			<key>Processor</key>
-			<string>PkgPayloadUnpacker</string>
+			<string>Copier</string>
+		</dict>
+		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>destination_path</key>
+				<string>%RECIPE_CACHE_DIR%/payload</string>
 				<key>pkg_payload_path</key>
 				<string>%RECIPE_CACHE_DIR%/unpack/Payload</string>
-                <key>destination_path</key>
-				<string>%RECIPE_CACHE_DIR%/payload</string>
-                <key>purge_destination</key>
-                <true/>
+				<key>purge_destination</key>
+				<true/>
 			</dict>
-		</dict>
-        <dict>
 			<key>Processor</key>
-			<string>PlistReader</string>
+			<string>PkgPayloadUnpacker</string>
+		</dict>
+		<dict>
 			<key>Arguments</key>
 			<dict>
 				<key>info_path</key>
 				<string>%RECIPE_CACHE_DIR%/payload/Applications/Jamf Connect Sync.app/Contents/Info.plist</string>
 			</dict>
-		</dict>
-        <dict>
 			<key>Processor</key>
-			<string>PkgCopier</string>
+			<string>PlistReader</string>
+		</dict>
+		<dict>
 			<key>Arguments</key>
 			<dict>
+				<key>pkg_path</key>
+				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg</string>
 				<key>source_pkg</key>
 				<string>%pathname%/* Sync/*.pkg</string>
-                <key>pkg_path</key>
-				<string>%RECIPE_CACHE_DIR%/%NAME%-%version%.pkg</string>
 			</dict>
+			<key>Processor</key>
+			<string>PkgCopier</string>
 		</dict>
-    </array>
+	</array>
 </dict>
 </plist>
